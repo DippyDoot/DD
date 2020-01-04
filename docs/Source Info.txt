@@ -1,0 +1,20 @@
+SourceInfo
+Id
+DateTimeCreated		- When source was created
+DateTimePosted		- When source was posted
+DateTimeConverted	- When source was converted (added to a DD somewhere)
+DateTimeAdded		- When source was add to user's database
+DateTimeLastEdited	- When source was last edited. this corresponds to a resource being edited, not a gallery 
+			  Should be updated when the resource is modified externally. This can be tracked with the hash
+Url			- Url to source
+CustomInfo		- Custom info for a source. e.g. subreddit posted to, magic numbers
+
+PosterSourceGroupId	- SourceGroup that posted source
+CreatorSourceGroupId	- SourceGroup that created the source
+HostSourceGroupId	- SourceGroup that hosts the source, parser for custom info is attached to this
+
+SourceGroups
+Id
+Name
+Url
+Description
