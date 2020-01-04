@@ -1,0 +1,6 @@
+01. Remove dummy data
+02. Reset auto increments
+03. Vaccum
+04. Export schema for git dif
+05. Export default data for git dif
+06. Update documentaion (yeah right lol)

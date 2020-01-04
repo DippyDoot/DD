@@ -1,0 +1,64 @@
+Information about triggers that exist in the database.
+
+Timestamps are in unix
+
+Galleries
+	TR_Galleries_AU_Log_DateTimeLastEdited
+		AFTER UPDATE
+		Whenever a Gallery is updated,
+		Log a timestamp to Galleries.DateTimeLastEdited
+
+	TR_Galleries_AI_Log_DateTimeRated
+		AFTER INSERT
+		Whenever a Gallery is inserted and contains a rating,
+		Log a timestamp to Galleries.DateTimeRated
+
+	TR_Galleries_AU_Log_DateTimeRated
+		AFTER INSERT
+		Whenever a Gallery is updated and contains a new rating,
+		Log a timestamp to Galleries.DateTimeRated
+
+	TR_Galleries_AU_ClearLog_DateTimeRated
+		AFTER INSERT
+		Whenever a Gallery is inserted and contains a null rating and previous rating was not null,
+		Clear timestamp in Galleries.DateTimeRated
+
+GalleryTags
+	TR_GalleryTags_AI_Abort_TagTypeGroupTypeNotMatch
+		AFTER INSERT
+		Whenever a GalleryTag is inserted and contains a TagGroupId,
+		If the Tag.TagType and Group.TagType are not the same,
+		then abort
+
+	TR_GalleryTags_AU_Abort_TagTypeGroupTypeNotMatch
+		AFTER UPDATE
+		Whenever a GalleryTag is updated and contains a TagGroupId,
+		If the Tag.TagType and Group.TagType are not the same,
+		then abort
+
+	TR_GalleryTags_AI_Log_OnTagAdded_DateTimeLastTagged
+		AFTER INSERT
+		Whenever a GalleryTag is inserted,
+		Log a timestamp to the Gallery that was tagged in Gallery.DateTimeLastTagged
+
+	TR_GalleryTags_AU_Abort_OnTagUpdated_DateTimeLastTagged
+		AFTER UPDATE
+		Whenever a GalleryTag is updatand,
+		Log a timestamp to the Gallery that was tagged in Gallery.DateTimeLastTagged
+
+SourceInfo
+	TR_SourceInfo_AI_Log_DateTimeConverted
+		AFTER INSERT
+		Whenever a SourceInfo is inserted and DateTimeConverted is not already logged (is null),
+		Log a timestamp to SourceInfo.DateTimeConverted
+	TR_SourceInfo_AI_Log_DateTimeAdded
+		AFTER INSERT
+		Whenever a SourceInfo is inserted,
+		Log a timestamp to SourceInfo.DateTimeAdded
+	TR_SourceInfo_AU_Log_DateTimeConverted
+		AFTER UPDATE
+		Whenever a SourceInfo is updated and been changed, excluding Id and DateTimeConverted and DateTimeAdded,
+		Log a timestamp to SourceInfo.DateTimeLastEdited
+		NOTE: 	The two timestamps are updated automatically, 
+			but this should also be updated when a ResourceFile is modified by user or the program.
+			Changes can be tracked with the hash. The hash must be done by the program.

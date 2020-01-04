@@ -1,0 +1,92 @@
+Since indexes only affect query speed, they are not considered necessary for DD implementations.
+Meaning that you could remove or add indexes as you please since it doesn't affect the "standard".
+
+The current strategy for indexes is to put one for every entry point in a query.
+i.e. If you try to find something withe x value as a conditon, x will have an index.
+Indexes try to be unique, even if it means including unecessary columns.
+Size of indexes insn't a concern since even with a lot (non-redundant) indexes, 
+the database will likely never be bigger than half a gigabyte in average worst case. (as estimated guess)
+
+The only limitation then is insert speed.
+Which is already really, really slow for HDD, 
+since SQLite doesn't consider an insert successful until it has been safely written to disk.
+
+With that said, this is a list of all indexes included by default.
+
+Quick notes about naming
+UQ = Unique
+CO = Covered
+
+Covered here indicates an index that contains columns that would be complete out-points for a query.
+This does not include indexes that contain irrelavant columns (columns that are included only to make indexes unique).
+
+Each index follows the naming scheme: IX_{Unique}_{Covered}_{Table}_{Columns}
+
+Collections
+	IX_UQ_Collections_CollectionTagId_GalleryId
+
+FavoriteGalleries
+	IX_UQ_FavoriteGalleries_GalleryId
+	IX_UQ_FavoriteGalleries_Id
+
+FavoriteTags
+	IX_UQ_FavoriteTags_Id
+	IX_UQ_FavoriteTags_TagId
+
+Galleries
+	IX_UQ_Galleries_Id
+	IX_UQ_Galleries_Rating_Id
+	IX_UQ_Galleries_GalleryTypeId_Id
+
+GalleryAliases
+	IX_UQ_GalleryAliases_Id
+	IX_UQ_GalleryAliases_GalleryId_Id
+
+GalleryRelations
+	IX_UQ_GalleryRelations_Id
+	IX_UQ_CO_GalleryRelations_FromGalleryId_ToGalleryId
+	IX_UQ_CO_GalleryRelations_ToGalleryId_FromGalleryId
+
+GalleryTags
+	IX_UQ_CO_GalleryTags_TagId_GalleryId
+	IX_UQ_CO_GalleryTags_GalleryId_TagGroupId_TagId
+
+GalleryTypes
+	IX_UQ_CO_GalleryTypes_Id_Name
+
+ResourceFiles
+	IX_UQ_ResourceFiles_Id
+	IX_UQ_ResourceFiles_SourceInfoId
+
+SourceGroups
+	IX_UQ_SourceGroups_Id
+
+SourceInfo
+	IX_UQ_SourceInfo_Id
+	IX_UQ_CO_SourceInfo_DateTimeCreated_Id
+	IX_UQ_CO_SourceInfo_DateTimePosted_Id
+	IX_UQ_CO_SourceInfo_DateTImeConverted_Id
+	IX_UQ_CO_SourceInfo_DateTimeAdded_Id
+
+TagAliases
+	IX_UQ_TagAliases_Id
+	IX_UQ_TagAliases_TagId_Id
+
+TagGroups
+	IX_UQ_TagGroups_Id
+	IX_UQ_CO_TagGroups_Name_Id
+	IX_UQ_CO_TagGroups_TagTypeId_Id
+
+TagRelations
+	IX_UQ_TagRelaitions_Id
+	IX_UQ_CO_TagRelations_FromTagId_ToTagId
+	IX_UQ_CO_TagRelations_ToTagId_FromTagId
+
+Tags
+	IX_UQ_Tags_Id
+	IX_UQ_CO_Tags_Name_TagTypeId_Id
+	IX_UQ_Tags_TagTypeId_Id
+
+TagTypes
+	IX_UQ_CO_TagTypes_Id_Name
+	IX_UQ_CO_TagTypes_Name_Id
