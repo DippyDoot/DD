@@ -1,5 +1,5 @@
 --
--- File generated with SQLiteStudio v3.2.1 on Mon Jan 6 02:00:01 2020
+-- File generated with SQLiteStudio v3.2.1 on Mon Jan 6 03:02:23 2020
 --
 -- Text encoding used: UTF-8
 --
@@ -32,13 +32,12 @@ CREATE TABLE Collection (
 DROP TABLE IF EXISTS FavoriteGallery;
 
 CREATE TABLE FavoriteGallery (
-    Id        INTEGER CONSTRAINT PK_FavoriteGallery_Id PRIMARY KEY AUTOINCREMENT
-                      CONSTRAINT NN_FavoriteGallery_Id NOT NULL
-                      CONSTRAINT UQ_FavoriteGallery_Id UNIQUE,
-    GalleryId INTEGER CONSTRAINT FK_FavoriteGallery_GalleryId_Gallery_Id REFERENCES Gallery (Id) ON DELETE CASCADE
-                                                                                                 ON UPDATE CASCADE
-                      CONSTRAINT UQ_FavoriteGallery_GalleryId UNIQUE
-                      CONSTRAINT NN_FavoriteGallery_GalleryId NOT NULL
+    GalleryId         INTEGER CONSTRAINT FK_FavoriteGallery_GalleryId_Gallery_Id REFERENCES Gallery (Id) ON DELETE CASCADE
+                                                                                                         ON UPDATE CASCADE
+                              CONSTRAINT UQ_FavoriteGallery_GalleryId UNIQUE
+                              CONSTRAINT NN_FavoriteGallery_GalleryId NOT NULL
+                              CONSTRAINT PK_FavoriteGallery_GalleryId PRIMARY KEY,
+    DateTimeFavorited INTEGER
 );
 
 
@@ -46,13 +45,12 @@ CREATE TABLE FavoriteGallery (
 DROP TABLE IF EXISTS FavoriteTag;
 
 CREATE TABLE FavoriteTag (
-    Id    INTEGER CONSTRAINT PK_FavoriteTag_Id PRIMARY KEY AUTOINCREMENT
-                  CONSTRAINT UQ_FavoriteTag_Id UNIQUE
-                  CONSTRAINT NN_FavoriteTag_Id NOT NULL,
-    TagId INTEGER CONSTRAINT FK_FavoriteTag_TagId_Tag_Id REFERENCES Tag (Id) ON DELETE CASCADE
-                                                                             ON UPDATE CASCADE
-                  CONSTRAINT UQ_FavoriteTag_TagId UNIQUE
-                  CONSTRAINT NN_FavoriteTag_TagId NOT NULL
+    TagId             INTEGER CONSTRAINT FK_FavoriteTag_TagId_Tag_Id REFERENCES Tag (Id) ON DELETE CASCADE
+                                                                                         ON UPDATE CASCADE
+                              CONSTRAINT UQ_FavoriteTag_TagId UNIQUE
+                              CONSTRAINT NN_FavoriteTag_TagId NOT NULL
+                              CONSTRAINT PK_FavoriteTag_TagId PRIMARY KEY,
+    DateTimeFavorited INTEGER
 );
 
 
@@ -295,6 +293,24 @@ CREATE TABLE TagType (
 );
 
 
+-- Index: IX_UQ_CO_FavoriteGallery_DateTimeFavorited_GalleryId
+DROP INDEX IF EXISTS IX_UQ_CO_FavoriteGallery_DateTimeFavorited_GalleryId;
+
+CREATE UNIQUE INDEX IX_UQ_CO_FavoriteGallery_DateTimeFavorited_GalleryId ON FavoriteGallery (
+    DateTimeFavorited,
+    GalleryId
+);
+
+
+-- Index: IX_UQ_CO_FavoriteTag_DateTimeFavorited_TagId
+DROP INDEX IF EXISTS IX_UQ_CO_FavoriteTag_DateTimeFavorited_TagId;
+
+CREATE UNIQUE INDEX IX_UQ_CO_FavoriteTag_DateTimeFavorited_TagId ON FavoriteTag (
+    DateTimeFavorited,
+    TagId
+);
+
+
 -- Index: IX_UQ_CO_GalleryRelation_FromGalleryId_ToGalleryId
 DROP INDEX IF EXISTS IX_UQ_CO_GalleryRelation_FromGalleryId_ToGalleryId;
 
@@ -458,22 +474,6 @@ CREATE UNIQUE INDEX IX_UQ_FavoriteGallery_GalleryId ON FavoriteGallery (
 );
 
 
--- Index: IX_UQ_FavoriteGallery_Id
-DROP INDEX IF EXISTS IX_UQ_FavoriteGallery_Id;
-
-CREATE UNIQUE INDEX IX_UQ_FavoriteGallery_Id ON FavoriteGallery (
-    Id
-);
-
-
--- Index: IX_UQ_FavoriteTag_Id
-DROP INDEX IF EXISTS IX_UQ_FavoriteTag_Id;
-
-CREATE UNIQUE INDEX IX_UQ_FavoriteTag_Id ON FavoriteTag (
-    Id
-);
-
-
 -- Index: IX_UQ_FavoriteTag_TagId
 DROP INDEX IF EXISTS IX_UQ_FavoriteTag_TagId;
 
@@ -613,6 +613,60 @@ DROP INDEX IF EXISTS IX_UQ_TagRelaitions_Id;
 CREATE UNIQUE INDEX IX_UQ_TagRelaitions_Id ON TagRelation (
     Id
 );
+
+
+-- Trigger: TR_FavoriteGallery_AI_Log_DateTimeFavorited
+DROP TRIGGER IF EXISTS TR_FavoriteGallery_AI_Log_DateTimeFavorited;
+CREATE TRIGGER TR_FavoriteGallery_AI_Log_DateTimeFavorited
+         AFTER INSERT
+            ON FavoriteGallery
+      FOR EACH ROW
+BEGIN
+    UPDATE FavoriteGallery
+       SET DateTimeFavorited = strftime('%s', 'now') 
+     WHERE _rowid_ = NEW._rowid_;
+END;
+
+
+-- Trigger: TR_FavoriteGallery_AU_Log_DateTimeFavorited
+DROP TRIGGER IF EXISTS TR_FavoriteGallery_AU_Log_DateTimeFavorited;
+CREATE TRIGGER TR_FavoriteGallery_AU_Log_DateTimeFavorited
+         AFTER UPDATE
+            ON FavoriteGallery
+      FOR EACH ROW
+          WHEN NEW.GalleryId IS NOT OLD.GalleryId
+BEGIN
+    UPDATE FavoriteGallery
+       SET DateTimeFavorited = strftime('%s', 'now') 
+     WHERE _rowid_ = NEW._rowid_;
+END;
+
+
+-- Trigger: TR_FavoriteTag_AI_Log_DateTimeFavorited
+DROP TRIGGER IF EXISTS TR_FavoriteTag_AI_Log_DateTimeFavorited;
+CREATE TRIGGER TR_FavoriteTag_AI_Log_DateTimeFavorited
+         AFTER INSERT
+            ON FavoriteTag
+      FOR EACH ROW
+BEGIN
+    UPDATE FavoriteTag
+       SET DateTimeFavorited = strftime('%s', 'now') 
+     WHERE _rowid_ = NEW._rowid_;
+END;
+
+
+-- Trigger: TR_FavoriteTag_AU_Log_DateTimeFavorited
+DROP TRIGGER IF EXISTS TR_FavoriteTag_AU_Log_DateTimeFavorited;
+CREATE TRIGGER TR_FavoriteTag_AU_Log_DateTimeFavorited
+         AFTER UPDATE
+            ON FavoriteTag
+      FOR EACH ROW
+          WHEN NEW.TagId IS NOT OLD.TagId
+BEGIN
+    UPDATE FavoriteTag
+       SET DateTimeFavorited = strftime('%s', 'now') 
+     WHERE _rowid_ = NEW._rowid_;
+END;
 
 
 -- Trigger: TR_Gallery_AI_Log_DateTimeRated

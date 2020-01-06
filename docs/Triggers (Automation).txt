@@ -2,6 +2,28 @@ Information about triggers that exist in the database.
 
 Timestamps are in unix
 
+FavoriteGallery
+	TR_FavoriteGallery_AI_Log_DateTimeFavorited
+		AFTER INSERT
+		Whenever a FavortieGallery is inserted (a gallery is favortied),
+		Log a timestamp to FavoriteGallery.DateTimeFavorited
+
+	TR_FavoriteGallery_AU_Log_DateTimeFavorited
+		AFTER UPDATE
+		Whenever a FavortieGallery is updated,
+		Log a timestamp to FavoriteGallery.DateTimeFavorited
+
+FavoriteTag
+	TR_FavoriteTag_AI_Log_DateTimeFavorited
+		AFTER INSERT
+		Whenever a FavortieTag is inserted (a gallery is favortied),
+		Log a timestamp to FavoriteTag.DateTimeFavorited
+
+	TR_FavoriteTag_AU_Log_DateTimeFavorited
+		AFTER UPDATE
+		Whenever a FavortieTag is updated,
+		Log a timestamp to FavoriteTag.DateTimeFavorited
+
 Gallery
 	TR_Gallery_AU_Log_DateTimeLastEdited
 		AFTER UPDATE
@@ -51,10 +73,12 @@ SourceInfo
 		AFTER INSERT
 		Whenever a SourceInfo is inserted and DateTimeConverted is not already logged (is null),
 		Log a timestamp to SourceInfo.DateTimeConverted
+
 	TR_SourceInfo_AI_Log_DateTimeAdded
 		AFTER INSERT
 		Whenever a SourceInfo is inserted,
 		Log a timestamp to SourceInfo.DateTimeAdded
+
 	TR_SourceInfo_AU_Log_DateTimeConverted
 		AFTER UPDATE
 		Whenever a SourceInfo is updated and been changed, excluding Id and DateTimeConverted and DateTimeAdded,

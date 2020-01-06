@@ -27,11 +27,11 @@ Collection
 
 FavoriteGallery
 	IX_UQ_FavoriteGallery_GalleryId
-	IX_UQ_FavoriteGallery_Id
+	IX_UQ_CO_FavoriteGallery_DateTimeFavorited_GalleryId
 
 FavoriteTag
-	IX_UQ_FavoriteTag_Id
 	IX_UQ_FavoriteTag_TagId
+	IX_UQ_CO_FavoriteTag_DateTimeFavorited_TagId
 
 Gallery
 	IX_UQ_Gallery_Id
