@@ -1,78 +1,78 @@
 --
--- File generated with SQLiteStudio v3.2.1 on Sat Jan 4 03:52:43 2020
+-- File generated with SQLiteStudio v3.2.1 on Mon Jan 6 02:00:01 2020
 --
 -- Text encoding used: UTF-8
 --
 PRAGMA foreign_keys = off;
 BEGIN TRANSACTION;
 
--- Table: Collections
-DROP TABLE IF EXISTS Collections;
+-- Table: Collection
+DROP TABLE IF EXISTS Collection;
 
-CREATE TABLE Collections (
-    CollectionTagId INTEGER CONSTRAINT NN_Collections_CollectionTagId NOT NULL
-                            CONSTRAINT FK_Collections_CollectionTagId_Tags_Id REFERENCES Tags (Id) ON DELETE CASCADE
-                                                                                                   ON UPDATE CASCADE,
-    GalleryId       INTEGER CONSTRAINT NN_Collections_GalleryId NOT NULL
-                            CONSTRAINT FK_Collections_GalleryId_Galleries_Id REFERENCES Galleries (Id) ON DELETE CASCADE
-                                                                                                       ON UPDATE CASCADE,
+CREATE TABLE Collection (
+    CollectionTagId INTEGER CONSTRAINT NN_Collection_CollectionTagId NOT NULL
+                            CONSTRAINT FK_Collection_CollectionTagId_Tag_Id REFERENCES Tag (Id) ON DELETE CASCADE
+                                                                                                ON UPDATE CASCADE,
+    GalleryId       INTEGER CONSTRAINT NN_Collection_GalleryId NOT NULL
+                            CONSTRAINT FK_Collection_GalleryId_Gallery_Id REFERENCES Gallery (Id) ON DELETE CASCADE
+                                                                                                  ON UPDATE CASCADE,
     [Order]         INTEGER,
-    CONSTRAINT PK_Collections_CollectionTagId_GalleryId PRIMARY KEY (
+    CONSTRAINT PK_Collection_CollectionTagId_GalleryId PRIMARY KEY (
         CollectionTagId,
         GalleryId
     ),
-    CONSTRAINT UQ_Collections_CollectionTagId_GalleryId UNIQUE (
+    CONSTRAINT UQ_Collection_CollectionTagId_GalleryId UNIQUE (
         CollectionTagId,
         GalleryId
     )
 );
 
 
--- Table: FavoriteGalleries
-DROP TABLE IF EXISTS FavoriteGalleries;
+-- Table: FavoriteGallery
+DROP TABLE IF EXISTS FavoriteGallery;
 
-CREATE TABLE FavoriteGalleries (
-    Id        INTEGER CONSTRAINT PK_FavoriteGalleries_Id PRIMARY KEY AUTOINCREMENT
-                      CONSTRAINT NN_FavoriteGalleries_Id NOT NULL
-                      CONSTRAINT UQ_FavoriteGalleries_Id UNIQUE,
-    GalleryId INTEGER CONSTRAINT FK_FavoriteGalleries_GalleryId_Galleries_Id REFERENCES Galleries (Id) ON DELETE CASCADE
-                                                                                                       ON UPDATE CASCADE
-                      CONSTRAINT UQ_FavoriteGalleries_GalleryId UNIQUE
-                      CONSTRAINT NN_FavoriteGalleries_GalleryId NOT NULL
+CREATE TABLE FavoriteGallery (
+    Id        INTEGER CONSTRAINT PK_FavoriteGallery_Id PRIMARY KEY AUTOINCREMENT
+                      CONSTRAINT NN_FavoriteGallery_Id NOT NULL
+                      CONSTRAINT UQ_FavoriteGallery_Id UNIQUE,
+    GalleryId INTEGER CONSTRAINT FK_FavoriteGallery_GalleryId_Gallery_Id REFERENCES Gallery (Id) ON DELETE CASCADE
+                                                                                                 ON UPDATE CASCADE
+                      CONSTRAINT UQ_FavoriteGallery_GalleryId UNIQUE
+                      CONSTRAINT NN_FavoriteGallery_GalleryId NOT NULL
 );
 
 
--- Table: FavoriteTags
-DROP TABLE IF EXISTS FavoriteTags;
+-- Table: FavoriteTag
+DROP TABLE IF EXISTS FavoriteTag;
 
-CREATE TABLE FavoriteTags (
-    Id    INTEGER CONSTRAINT PK_FavoriteTags_Id PRIMARY KEY AUTOINCREMENT
-                  CONSTRAINT UQ_FavoriteTags_Id UNIQUE
-                  CONSTRAINT NN_FavoriteTags_Id NOT NULL,
-    TagId INTEGER CONSTRAINT FK_FavoriteTags_TagId_Tags_Id REFERENCES Tags (Id) ON DELETE CASCADE
-                                                                                ON UPDATE CASCADE
-                  CONSTRAINT UQ_FavoriteTags_TagId UNIQUE
-                  CONSTRAINT NN_FavoriteTags_TagId NOT NULL
+CREATE TABLE FavoriteTag (
+    Id    INTEGER CONSTRAINT PK_FavoriteTag_Id PRIMARY KEY AUTOINCREMENT
+                  CONSTRAINT UQ_FavoriteTag_Id UNIQUE
+                  CONSTRAINT NN_FavoriteTag_Id NOT NULL,
+    TagId INTEGER CONSTRAINT FK_FavoriteTag_TagId_Tag_Id REFERENCES Tag (Id) ON DELETE CASCADE
+                                                                             ON UPDATE CASCADE
+                  CONSTRAINT UQ_FavoriteTag_TagId UNIQUE
+                  CONSTRAINT NN_FavoriteTag_TagId NOT NULL
 );
 
 
--- Table: Galleries
-DROP TABLE IF EXISTS Galleries;
+-- Table: Gallery
+DROP TABLE IF EXISTS Gallery;
 
-CREATE TABLE Galleries (
-    Id                 INTEGER    CONSTRAINT PK_Galleries_Id PRIMARY KEY AUTOINCREMENT
-                                  CONSTRAINT UQ_Galleries_Id UNIQUE
-                                  CONSTRAINT NN_Galleries_Id NOT NULL,
-    Name               TEXT (300) CONSTRAINT CK_Galleries_Name_MaxLength_300 CHECK (length(Name) <= 300),
-    NameCultureInfo    TEXT (17)  CONSTRAINT CK_Galleries_NameCultureInfo_MaxLength_17 CHECK (length(NameCultureInfo) <= 17),
-    Description        TEXT (500) CONSTRAINT CK_Galleries_Description_MaxLegnth_500 CHECK (length(Description) <= 500),
-    GalleryTypeId      INTEGER    CONSTRAINT NN_Galleries_GalleryTypeId NOT NULL
-                                  CONSTRAINT FK_Galleries_GalleryTypeId REFERENCES GalleryTypes (Id) ON DELETE RESTRICT
-                                                                                                     ON UPDATE CASCADE,
-    ResourceFileId     INTEGER    CONSTRAINT NN_Galleries_ResourceFileId NOT NULL
-                                  CONSTRAINT FK_Galleries_ResourceFileId REFERENCES ResourceFiles (Id) ON DELETE RESTRICT
-                                                                                                       ON UPDATE CASCADE
-                                  CONSTRAINT UQ_Galleries_ResourceFileId UNIQUE,
+CREATE TABLE Gallery (
+    Id                 INTEGER    CONSTRAINT PK_Gallery_Id PRIMARY KEY AUTOINCREMENT
+                                  CONSTRAINT UQ_Gallery_Id UNIQUE
+                                  CONSTRAINT NN_Gallery_Id NOT NULL,
+    Name               TEXT (300) CONSTRAINT CK_Gallery_Name_MaxLength_300 CHECK (length(Name) <= 300),
+    NameCultureInfo    TEXT (17)  CONSTRAINT CK_Gallery_NameCultureInfo_MaxLength_17 CHECK (length(NameCultureInfo) <= 17),
+    Description        TEXT (500) CONSTRAINT CK_Gallery_Description_MaxLegnth_500 CHECK (length(Description) <= 500),
+    GalleryTypeId      INTEGER    CONSTRAINT NN_Gallery_GalleryTypeId NOT NULL
+                                  CONSTRAINT FK_Gallery_GalleryTypeId REFERENCES GalleryType (Id) ON DELETE RESTRICT
+                                                                                                  ON UPDATE CASCADE,
+    ResourceFileId     INTEGER    CONSTRAINT NN_Gallery_ResourceFileId NOT NULL
+                                  CONSTRAINT FK_Gallery_ResourceFileId REFERENCES ResourceFile (Id) ON DELETE RESTRICT
+                                                                                                    ON UPDATE CASCADE
+                                  CONSTRAINT UQ_Gallery_ResourceFileId UNIQUE,
     Length             INTEGER,
     Rating             INTEGER,
     DateTimeRated      INTEGER,
@@ -81,103 +81,103 @@ CREATE TABLE Galleries (
 );
 
 
--- Table: GalleryAliases
-DROP TABLE IF EXISTS GalleryAliases;
+-- Table: GalleryAlias
+DROP TABLE IF EXISTS GalleryAlias;
 
-CREATE TABLE GalleryAliases (
-    Id              INTEGER    CONSTRAINT PK_GalleryAliases_Id PRIMARY KEY AUTOINCREMENT
-                               CONSTRAINT UQ_GalleryAliases_Id UNIQUE
-                               CONSTRAINT NN_GalleryAliases_Id NOT NULL,
-    GalleryId       INTEGER    CONSTRAINT FK_GalleryAliases_GalleryId REFERENCES Galleries (Id) ON DELETE CASCADE
-                                                                                                ON UPDATE CASCADE
-                               CONSTRAINT NN_GalleryAliases_GalleryId NOT NULL,
-    Name            TEXT (300) CONSTRAINT NN_GalleryAliases_Name NOT NULL
-                               CONSTRAINT CK_GalleryAliases_Name_MaxLength_300 CHECK (length(Name) <= 300),
-    NameCultureInfo TEXT (17)  CONSTRAINT CK_GalleryAliases_Name_MaxLength_17 CHECK (length(NameCultureInfo) <= 17) 
+CREATE TABLE GalleryAlias (
+    Id              INTEGER    CONSTRAINT PK_GalleryAlias_Id PRIMARY KEY AUTOINCREMENT
+                               CONSTRAINT UQ_GalleryAlias_Id UNIQUE
+                               CONSTRAINT NN_GalleryAlias_Id NOT NULL,
+    GalleryId       INTEGER    CONSTRAINT FK_GalleryAlias_GalleryId REFERENCES Gallery (Id) ON DELETE CASCADE
+                                                                                            ON UPDATE CASCADE
+                               CONSTRAINT NN_GalleryAlias_GalleryId NOT NULL,
+    Name            TEXT (300) CONSTRAINT NN_GalleryAlias_Name NOT NULL
+                               CONSTRAINT CK_GalleryAlias_Name_MaxLength_300 CHECK (length(Name) <= 300),
+    NameCultureInfo TEXT (17)  CONSTRAINT CK_GalleryAlias_Name_MaxLength_17 CHECK (length(NameCultureInfo) <= 17) 
 );
 
 
--- Table: GalleryRelations
-DROP TABLE IF EXISTS GalleryRelations;
+-- Table: GalleryRelation
+DROP TABLE IF EXISTS GalleryRelation;
 
-CREATE TABLE GalleryRelations (
-    Id            INTEGER CONSTRAINT FK_GalleryRelations_Id PRIMARY KEY AUTOINCREMENT
-                          CONSTRAINT UQ_GalleryRelations_Id UNIQUE
-                          CONSTRAINT NN_GalleryRelations_Id NOT NULL,
-    FromGalleryId INTEGER CONSTRAINT NN_GalleryRelations_FromTagId NOT NULL
-                          CONSTRAINT FK_GalleryRelations_FromTagId_Galleries_Id REFERENCES Galleries (Id) ON DELETE CASCADE
-                                                                                                          ON UPDATE CASCADE,
-    ToGalleryId   INTEGER CONSTRAINT NN_GalleryRelations_ToTagId NOT NULL
-                          CONSTRAINT FK_GalleryRelations_ToTagId REFERENCES Galleries (Id),
-    CONSTRAINT UQ_GalleryRelations_FromTagId_ToTagId UNIQUE (
+CREATE TABLE GalleryRelation (
+    Id            INTEGER CONSTRAINT FK_GalleryRelation_Id PRIMARY KEY AUTOINCREMENT
+                          CONSTRAINT UQ_GalleryRelation_Id UNIQUE
+                          CONSTRAINT NN_GalleryRelation_Id NOT NULL,
+    FromGalleryId INTEGER CONSTRAINT NN_GalleryRelation_FromTagId NOT NULL
+                          CONSTRAINT FK_GalleryRelation_FromTagId_Gallery_Id REFERENCES Gallery (Id) ON DELETE CASCADE
+                                                                                                     ON UPDATE CASCADE,
+    ToGalleryId   INTEGER CONSTRAINT NN_GalleryRelation_ToTagId NOT NULL
+                          CONSTRAINT FK_GalleryRelation_ToTagId REFERENCES Gallery (Id),
+    CONSTRAINT UQ_GalleryRelation_FromTagId_ToTagId UNIQUE (
         FromGalleryId,
         ToGalleryId
     )
 );
 
 
--- Table: GalleryTags
-DROP TABLE IF EXISTS GalleryTags;
+-- Table: GalleryTag
+DROP TABLE IF EXISTS GalleryTag;
 
-CREATE TABLE GalleryTags (
-    GalleryId  INTEGER CONSTRAINT NN_GalleryTags_GalleryId NOT NULL,
-    TagId      INTEGER CONSTRAINT NN_GalleryTags_TagId NOT NULL,
-    TagGroupId INTEGER CONSTRAINT FK_GalleryTags_TagGroupId REFERENCES TagGroups (Id) ON DELETE SET NULL
-                                                                                      ON UPDATE CASCADE,
-    CONSTRAINT PK_GalleryTags_GalleryId_TagId PRIMARY KEY (
+CREATE TABLE GalleryTag (
+    GalleryId  INTEGER CONSTRAINT NN_GalleryTag_GalleryId NOT NULL,
+    TagId      INTEGER CONSTRAINT NN_GalleryTag_TagId NOT NULL,
+    TagGroupId INTEGER CONSTRAINT FK_GalleryTag_TagGroupId REFERENCES TagGroup (Id) ON DELETE SET NULL
+                                                                                    ON UPDATE CASCADE,
+    CONSTRAINT PK_GalleryTag_GalleryId_TagId PRIMARY KEY (
         GalleryId,
         TagId
     ),
-    CONSTRAINT UQ_GalleryTags_GalleryId_TagId UNIQUE (
+    CONSTRAINT UQ_GalleryTag_GalleryId_TagId UNIQUE (
         GalleryId,
         TagId
     )
 );
 
 
--- Table: GalleryTypes
-DROP TABLE IF EXISTS GalleryTypes;
+-- Table: GalleryType
+DROP TABLE IF EXISTS GalleryType;
 
-CREATE TABLE GalleryTypes (
-    Id   INTEGER   CONSTRAINT PK_GalleryTypes_Id PRIMARY KEY AUTOINCREMENT
-                   CONSTRAINT UQ_GalleryTypes_Id UNIQUE
-                   CONSTRAINT NN_GalleryTypes_Id NOT NULL,
-    Name TEXT (17) CONSTRAINT UQ_GalleryTypes_Name UNIQUE
-                   CONSTRAINT CK_GalleryTypes_Name_MaxLength_17 CHECK (length(Name) <= 17) 
+CREATE TABLE GalleryType (
+    Id   INTEGER   CONSTRAINT PK_GalleryType_Id PRIMARY KEY AUTOINCREMENT
+                   CONSTRAINT UQ_GalleryType_Id UNIQUE
+                   CONSTRAINT NN_GalleryType_Id NOT NULL,
+    Name TEXT (17) CONSTRAINT UQ_GalleryType_Name UNIQUE
+                   CONSTRAINT CK_GalleryType_Name_MaxLength_17 CHECK (length(Name) <= 17) 
 );
 
 
--- Table: ResourceFiles
-DROP TABLE IF EXISTS ResourceFiles;
+-- Table: ResourceFile
+DROP TABLE IF EXISTS ResourceFile;
 
-CREATE TABLE ResourceFiles (
-    Id           INTEGER    CONSTRAINT PK_ResourceFiles_Id PRIMARY KEY AUTOINCREMENT
-                            CONSTRAINT UQ_ResourceFiles_Id UNIQUE
-                            CONSTRAINT NN_ResourceFiles_Id NOT NULL,
-    RelativePath TEXT (260) CONSTRAINT UQ_ResourceFiles_RelativePath UNIQUE
-                            CONSTRAINT NN_ResourceFiles_RelativePath NOT NULL
-                            CONSTRAINT CK_ResourceFiles_RelativePath_MaxLength_260 CHECK (length(RelativePath) <= 260),
-    Hash         INTEGER    CONSTRAINT NN_ResourceFiles_Hash NOT NULL,
-    SourceInfoId INTEGER    CONSTRAINT FK_ResourceFiles_SourceInfoId_SourceInfo_Id REFERENCES SourceInfo (Id) ON DELETE SET NULL
-                                                                                                              ON UPDATE CASCADE
-                            CONSTRAINT UQ_ResourceFiles_SourceInfoId UNIQUE
+CREATE TABLE ResourceFile (
+    Id           INTEGER    CONSTRAINT PK_ResourceFile_Id PRIMARY KEY AUTOINCREMENT
+                            CONSTRAINT UQ_ResourceFile_Id UNIQUE
+                            CONSTRAINT NN_ResourceFile_Id NOT NULL,
+    RelativePath TEXT (260) CONSTRAINT UQ_ResourceFile_RelativePath UNIQUE
+                            CONSTRAINT NN_ResourceFile_RelativePath NOT NULL
+                            CONSTRAINT CK_ResourceFile_RelativePath_MaxLength_260 CHECK (length(RelativePath) <= 260),
+    Hash         INTEGER    CONSTRAINT NN_ResourceFile_Hash NOT NULL,
+    SourceInfoId INTEGER    CONSTRAINT FK_ResourceFile_SourceInfoId_SourceInfo_Id REFERENCES SourceInfo (Id) ON DELETE SET NULL
+                                                                                                             ON UPDATE CASCADE
+                            CONSTRAINT UQ_ResourceFile_SourceInfoId UNIQUE
 );
 
 
--- Table: SourceGroups
-DROP TABLE IF EXISTS SourceGroups;
+-- Table: SourceGroup
+DROP TABLE IF EXISTS SourceGroup;
 
-CREATE TABLE SourceGroups (
-    Id          INTEGER     CONSTRAINT PK_SourceGroups_Id PRIMARY KEY AUTOINCREMENT
-                            CONSTRAINT UQ_SourceGroups_Id UNIQUE
-                            CONSTRAINT NN_SourceGroups_Id NOT NULL,
-    Name        TEXT (100)  CONSTRAINT UQ_SourceGroups_Name UNIQUE
-                            CONSTRAINT NN_SourceGroups_Name NOT NULL
-                            CONSTRAINT CK_SourceGroups_Name_MaxLength_100 CHECK (length(Name) <= 100),
-    Url         TEXT (2048) CONSTRAINT CK_SourceGroups_Url_MaxLength_2048 CHECK (length(Url) <= 2048),
-    Description TEXT (8000) CONSTRAINT CK_SourceGroups_Descriptions_MaxLength_8000 CHECK (length(Description) <= 8000),
-    TagId       INTEGER     CONSTRAINT FK_SourceGroups_TagId_Tags_Id REFERENCES Tags (Id) ON DELETE SET NULL
-                                                                                          ON UPDATE CASCADE
+CREATE TABLE SourceGroup (
+    Id          INTEGER     CONSTRAINT PK_SourceGroup_Id PRIMARY KEY AUTOINCREMENT
+                            CONSTRAINT UQ_SourceGroup_Id UNIQUE
+                            CONSTRAINT NN_SourceGroup_Id NOT NULL,
+    Name        TEXT (100)  CONSTRAINT UQ_SourceGroup_Name UNIQUE
+                            CONSTRAINT NN_SourceGroup_Name NOT NULL
+                            CONSTRAINT CK_SourceGroup_Name_MaxLength_100 CHECK (length(Name) <= 100),
+    Url         TEXT (2048) CONSTRAINT CK_SourceGroup_Url_MaxLength_2048 CHECK (length(Url) <= 2048),
+    Description TEXT (8000) CONSTRAINT CK_SourceGroup_Descriptions_MaxLength_8000 CHECK (length(Description) <= 8000),
+    TagId       INTEGER     CONSTRAINT FK_SourceGroup_TagId_Tag_Id REFERENCES Tag (Id) ON DELETE SET NULL
+                                                                                       ON UPDATE CASCADE
 );
 
 
@@ -195,147 +195,147 @@ CREATE TABLE SourceInfo (
     DateTimeLastEdited   INTEGER,
     Url                  TEXT (2048) CONSTRAINT CK_SourceInfo_Url_MaxLength_2048 CHECK (length(Url) <= 2048),
     CustomInfo           TEXT (8000) CONSTRAINT CK_SourceInfo_CustomInfo_MaxLength_8000 CHECK (length(CustomInfo) <= 8000),
-    PosterSourceGroupId  INTEGER     CONSTRAINT FK_SourceInfo_PosterSourceGroupId_SourceGroups_Id REFERENCES SourceGroups (Id) ON DELETE SET NULL
-                                                                                                                               ON UPDATE CASCADE,
-    CreatorSourceGroupId INTEGER     CONSTRAINT FK_SourceInfo_CreatorSourceGroupId_SourceGroups_Id REFERENCES Tags (Id) ON DELETE SET NULL
-                                                                                                                        ON UPDATE CASCADE,
-    HostSourceGroupId    INTEGER     CONSTRAINT FK_SourceInfo_HostSourceGroupId_SourceGroups_Id REFERENCES SourceGroups (Id) ON DELETE SET NULL
-                                                                                                                             ON UPDATE CASCADE
+    PosterSourceGroupId  INTEGER     CONSTRAINT FK_SourceInfo_PosterSourceGroupId_SourceGroup_Id REFERENCES SourceGroup (Id) ON DELETE SET NULL
+                                                                                                                             ON UPDATE CASCADE,
+    CreatorSourceGroupId INTEGER     CONSTRAINT FK_SourceInfo_CreatorSourceGroupId_SourceGroup_Id REFERENCES Tag (Id) ON DELETE SET NULL
+                                                                                                                      ON UPDATE CASCADE,
+    HostSourceGroupId    INTEGER     CONSTRAINT FK_SourceInfo_HostSourceGroupId_SourceGroup_Id REFERENCES SourceGroup (Id) ON DELETE SET NULL
+                                                                                                                           ON UPDATE CASCADE
 );
 
 
--- Table: TagAliases
-DROP TABLE IF EXISTS TagAliases;
+-- Table: Tag
+DROP TABLE IF EXISTS Tag;
 
-CREATE TABLE TagAliases (
-    Id              INTEGER    CONSTRAINT PK_TagAliases_Id PRIMARY KEY AUTOINCREMENT
-                               CONSTRAINT UQ_TagAliases_Id UNIQUE
-                               CONSTRAINT NN_TagAliases_Id NOT NULL,
-    TagId           INTEGER    CONSTRAINT FK_TagAliases_TagId_Tags_Id REFERENCES Tags (Id) ON DELETE CASCADE
-                                                                                           ON UPDATE CASCADE
-                               CONSTRAINT NN_TagAliases_TagId NOT NULL,
-    Name            TEXT (100) CONSTRAINT NN_TagAliases_Name NOT NULL
-                               CONSTRAINT CK_TagAliases_Name_MaxLength_100 CHECK (length(Name) <= 100),
-    NameCultureInfo TEXT (17)  CONSTRAINT CK_TagAliases_Name_MaxLength_17 CHECK (length(NameCultureInfo) <= 17) 
-);
-
-
--- Table: TagGroups
-DROP TABLE IF EXISTS TagGroups;
-
-CREATE TABLE TagGroups (
-    Id        INTEGER   CONSTRAINT PK_TagGroups_Id PRIMARY KEY AUTOINCREMENT
-                        CONSTRAINT UQ_TagGroups_Id UNIQUE
-                        CONSTRAINT NN_TagGroups_Id NOT NULL,
-    Name      TEXT (30) CONSTRAINT UQ_TagGroups_Name UNIQUE
-                        CONSTRAINT NN_TagGroups_Name NOT NULL
-                        CONSTRAINT CK_TagGroups_Name_MaxLength_30 CHECK (length(Name) <= 30),
-    TagTypeId INTEGER   CONSTRAINT NN_TagGroups_TagTypeId NOT NULL
-                        CONSTRAINT FK_TagGroups_TagTypeId_TagTypes_Id REFERENCES TagTypes (Id) ON DELETE RESTRICT
+CREATE TABLE Tag (
+    Id               INTEGER    CONSTRAINT PK_Tag_Id PRIMARY KEY AUTOINCREMENT
+                                CONSTRAINT UQ_Tag_Id UNIQUE
+                                CONSTRAINT NN_Tag_Id NOT NULL,
+    Name             TEXT (100) CONSTRAINT NN_Tag_Name NOT NULL
+                                CONSTRAINT CK_Tag_Name_MaxLength_100 CHECK (length(Name) <= 100),
+    NameCultureInfo  TEXT (17)  CONSTRAINT CK_Tag_NameCultureInfo_MaxLength_17 CHECK (length(NameCultureInfo) <= 17),
+    TagTypeId        INTEGER    CONSTRAINT FK_Tag_TagTypeId_TagType_Id REFERENCES TagType (Id) ON DELETE RESTRICT
                                                                                                ON UPDATE CASCADE
-);
-
-
--- Table: TagRelations
-DROP TABLE IF EXISTS TagRelations;
-
-CREATE TABLE TagRelations (
-    Id        INTEGER CONSTRAINT PK_TagRelations_Id PRIMARY KEY AUTOINCREMENT
-                      CONSTRAINT UQ_TagRelations_Id UNIQUE
-                      CONSTRAINT NN_TagRelations_Id NOT NULL,
-    FromTagId INTEGER CONSTRAINT NN_TagRelations_FromTagId NOT NULL
-                      CONSTRAINT FK_TagRelations_FromTagId_Tags_Id REFERENCES Tags (Id) ON DELETE CASCADE
-                                                                                        ON UPDATE CASCADE,
-    ToTagId   INTEGER CONSTRAINT FK_TagRelations_ToTagId_Tags_Id REFERENCES Tags (Id) ON DELETE CASCADE
-                                                                                      ON UPDATE CASCADE
-                      CONSTRAINT NN_TagRelations_ToTagId NOT NULL,
-    CONSTRAINT UQ_TagRelations_FromTagId_ToTagId UNIQUE (
-        FromTagId,
-        ToTagId
-    )
-);
-
-
--- Table: Tags
-DROP TABLE IF EXISTS Tags;
-
-CREATE TABLE Tags (
-    Id               INTEGER    CONSTRAINT PK_Tags_Id PRIMARY KEY AUTOINCREMENT
-                                CONSTRAINT UQ_Tags_Id UNIQUE
-                                CONSTRAINT NN_Tags_Id NOT NULL,
-    Name             TEXT (100) CONSTRAINT NN_Tags_Name NOT NULL
-                                CONSTRAINT CK_Tags_Name_MaxLength_100 CHECK (length(Name) <= 100),
-    NameCultureInfo  TEXT (17)  CONSTRAINT CK_Tags_NameCultureInfo_MaxLength_17 CHECK (length(NameCultureInfo) <= 17),
-    TagTypeId        INTEGER    CONSTRAINT FK_Tags_TagTypeId_TagTypes_Id REFERENCES TagTypes (Id) ON DELETE RESTRICT
-                                                                                                  ON UPDATE CASCADE
-                                CONSTRAINT NN_Tags_TagTypeId NOT NULL,
-    Description      TEXT (500) CONSTRAINT CK_Tags_TagTypeId_MaxLength_500 CHECK (length(Description) <= 500),
-    ShortDescription TEXT (100) CONSTRAINT CK_Tags_TagTypeId_MaxLength_100 CHECK (length(ShortDescription) <= 100),
-    ResourceFileId   INTEGER    CONSTRAINT FK_Tags_ResourceFileId_ResourceFiles_Id REFERENCES ResourceFiles (Id) ON DELETE SET NULL
-                                                                                                                 ON UPDATE CASCADE
-                                CONSTRAINT UQ_Tags_ResourceFileId UNIQUE,
+                                CONSTRAINT NN_Tag_TagTypeId NOT NULL,
+    Description      TEXT (500) CONSTRAINT CK_Tag_TagTypeId_MaxLength_500 CHECK (length(Description) <= 500),
+    ShortDescription TEXT (100) CONSTRAINT CK_Tag_TagTypeId_MaxLength_100 CHECK (length(ShortDescription) <= 100),
+    ResourceFileId   INTEGER    CONSTRAINT FK_Tag_ResourceFileId_ResourceFile_Id REFERENCES ResourceFile (Id) ON DELETE SET NULL
+                                                                                                              ON UPDATE CASCADE
+                                CONSTRAINT UQ_Tag_ResourceFileId UNIQUE,
     Rating           INTEGER,
-    CONSTRAINT UQ_Tags_Name_TagTypeId UNIQUE (
+    CONSTRAINT UQ_Tag_Name_TagTypeId UNIQUE (
         Name,
         TagTypeId
     )
 );
 
 
--- Table: TagTypes
-DROP TABLE IF EXISTS TagTypes;
+-- Table: TagAlias
+DROP TABLE IF EXISTS TagAlias;
 
-CREATE TABLE TagTypes (
-    Id   INTEGER   CONSTRAINT PK_TagTypes_Id PRIMARY KEY AUTOINCREMENT
-                   CONSTRAINT UQ_TagTypes_Id UNIQUE
-                   CONSTRAINT NN_TagTypes_Id NOT NULL,
-    Name TEXT (30) CONSTRAINT NN_TagTypes_Name NOT NULL
-                   CONSTRAINT CK_TagTypes_Name_MaxLength_30 CHECK (length(Name) <= 30) 
-                   CONSTRAINT UQ_TagTypes_Name UNIQUE
+CREATE TABLE TagAlias (
+    Id              INTEGER    CONSTRAINT PK_TagAlias_Id PRIMARY KEY AUTOINCREMENT
+                               CONSTRAINT UQ_TagAlias_Id UNIQUE
+                               CONSTRAINT NN_TagAlias_Id NOT NULL,
+    TagId           INTEGER    CONSTRAINT FK_TagAlias_TagId_Tag_Id REFERENCES Tag (Id) ON DELETE CASCADE
+                                                                                       ON UPDATE CASCADE
+                               CONSTRAINT NN_TagAlias_TagId NOT NULL,
+    Name            TEXT (100) CONSTRAINT NN_TagAlias_Name NOT NULL
+                               CONSTRAINT CK_TagAlias_Name_MaxLength_100 CHECK (length(Name) <= 100),
+    NameCultureInfo TEXT (17)  CONSTRAINT CK_TagAlias_Name_MaxLength_17 CHECK (length(NameCultureInfo) <= 17) 
 );
 
 
--- Index: IX_UQ_CO_GalleryRelations_FromGalleryId_ToGalleryId
-DROP INDEX IF EXISTS IX_UQ_CO_GalleryRelations_FromGalleryId_ToGalleryId;
+-- Table: TagGroup
+DROP TABLE IF EXISTS TagGroup;
 
-CREATE UNIQUE INDEX IX_UQ_CO_GalleryRelations_FromGalleryId_ToGalleryId ON GalleryRelations (
+CREATE TABLE TagGroup (
+    Id        INTEGER   CONSTRAINT PK_TagGroup_Id PRIMARY KEY AUTOINCREMENT
+                        CONSTRAINT UQ_TagGroup_Id UNIQUE
+                        CONSTRAINT NN_TagGroup_Id NOT NULL,
+    Name      TEXT (30) CONSTRAINT UQ_TagGroup_Name UNIQUE
+                        CONSTRAINT NN_TagGroup_Name NOT NULL
+                        CONSTRAINT CK_TagGroup_Name_MaxLength_30 CHECK (length(Name) <= 30),
+    TagTypeId INTEGER   CONSTRAINT NN_TagGroup_TagTypeId NOT NULL
+                        CONSTRAINT FK_TagGroup_TagTypeId_TagType_Id REFERENCES TagType (Id) ON DELETE RESTRICT
+                                                                                            ON UPDATE CASCADE
+);
+
+
+-- Table: TagRelation
+DROP TABLE IF EXISTS TagRelation;
+
+CREATE TABLE TagRelation (
+    Id        INTEGER CONSTRAINT PK_TagRelation_Id PRIMARY KEY AUTOINCREMENT
+                      CONSTRAINT UQ_TagRelation_Id UNIQUE
+                      CONSTRAINT NN_TagRelation_Id NOT NULL,
+    FromTagId INTEGER CONSTRAINT NN_TagRelation_FromTagId NOT NULL
+                      CONSTRAINT FK_TagRelation_FromTagId_Tag_Id REFERENCES Tag (Id) ON DELETE CASCADE
+                                                                                     ON UPDATE CASCADE,
+    ToTagId   INTEGER CONSTRAINT FK_TagRelation_ToTagId_Tag_Id REFERENCES Tag (Id) ON DELETE CASCADE
+                                                                                   ON UPDATE CASCADE
+                      CONSTRAINT NN_TagRelation_ToTagId NOT NULL,
+    CONSTRAINT UQ_TagRelation_FromTagId_ToTagId UNIQUE (
+        FromTagId,
+        ToTagId
+    )
+);
+
+
+-- Table: TagType
+DROP TABLE IF EXISTS TagType;
+
+CREATE TABLE TagType (
+    Id   INTEGER   CONSTRAINT PK_TagType_Id PRIMARY KEY AUTOINCREMENT
+                   CONSTRAINT UQ_TagType_Id UNIQUE
+                   CONSTRAINT NN_TagType_Id NOT NULL,
+    Name TEXT (30) CONSTRAINT NN_TagType_Name NOT NULL
+                   CONSTRAINT CK_TagType_Name_MaxLength_30 CHECK (length(Name) <= 30) 
+                   CONSTRAINT UQ_TagType_Name UNIQUE
+);
+
+
+-- Index: IX_UQ_CO_GalleryRelation_FromGalleryId_ToGalleryId
+DROP INDEX IF EXISTS IX_UQ_CO_GalleryRelation_FromGalleryId_ToGalleryId;
+
+CREATE UNIQUE INDEX IX_UQ_CO_GalleryRelation_FromGalleryId_ToGalleryId ON GalleryRelation (
     FromGalleryId,
     ToGalleryId
 );
 
 
--- Index: IX_UQ_CO_GalleryRelations_ToGalleryId_FromGalleryId
-DROP INDEX IF EXISTS IX_UQ_CO_GalleryRelations_ToGalleryId_FromGalleryId;
+-- Index: IX_UQ_CO_GalleryRelation_ToGalleryId_FromGalleryId
+DROP INDEX IF EXISTS IX_UQ_CO_GalleryRelation_ToGalleryId_FromGalleryId;
 
-CREATE UNIQUE INDEX IX_UQ_CO_GalleryRelations_ToGalleryId_FromGalleryId ON GalleryRelations (
+CREATE UNIQUE INDEX IX_UQ_CO_GalleryRelation_ToGalleryId_FromGalleryId ON GalleryRelation (
     ToGalleryId,
     FromGalleryId
 );
 
 
--- Index: IX_UQ_CO_GalleryTags_GalleryId_TagGroupId_TagId
-DROP INDEX IF EXISTS IX_UQ_CO_GalleryTags_GalleryId_TagGroupId_TagId;
+-- Index: IX_UQ_CO_GalleryTag_GalleryId_TagGroupId_TagId
+DROP INDEX IF EXISTS IX_UQ_CO_GalleryTag_GalleryId_TagGroupId_TagId;
 
-CREATE UNIQUE INDEX IX_UQ_CO_GalleryTags_GalleryId_TagGroupId_TagId ON GalleryTags (
+CREATE UNIQUE INDEX IX_UQ_CO_GalleryTag_GalleryId_TagGroupId_TagId ON GalleryTag (
     GalleryId,
     TagGroupId,
     TagId
 );
 
 
--- Index: IX_UQ_CO_GalleryTags_TagId_GalleryId
-DROP INDEX IF EXISTS IX_UQ_CO_GalleryTags_TagId_GalleryId;
+-- Index: IX_UQ_CO_GalleryTag_TagId_GalleryId
+DROP INDEX IF EXISTS IX_UQ_CO_GalleryTag_TagId_GalleryId;
 
-CREATE UNIQUE INDEX IX_UQ_CO_GalleryTags_TagId_GalleryId ON GalleryTags (
+CREATE UNIQUE INDEX IX_UQ_CO_GalleryTag_TagId_GalleryId ON GalleryTag (
     TagId,
     GalleryId
 );
 
 
--- Index: IX_UQ_CO_GalleryTypes_Id_Name
-DROP INDEX IF EXISTS IX_UQ_CO_GalleryTypes_Id_Name;
+-- Index: IX_UQ_CO_GalleryType_Id_Name
+DROP INDEX IF EXISTS IX_UQ_CO_GalleryType_Id_Name;
 
-CREATE UNIQUE INDEX IX_UQ_CO_GalleryTypes_Id_Name ON GalleryTypes (
+CREATE UNIQUE INDEX IX_UQ_CO_GalleryType_Id_Name ON GalleryType (
     Id,
     Name
 );
@@ -377,182 +377,182 @@ CREATE UNIQUE INDEX IX_UQ_CO_SourceInfo_DateTimePosted_Id ON SourceInfo (
 );
 
 
--- Index: IX_UQ_CO_TagGroups_Name_Id
-DROP INDEX IF EXISTS IX_UQ_CO_TagGroups_Name_Id;
+-- Index: IX_UQ_CO_Tag_Name_TagTypeId_Id
+DROP INDEX IF EXISTS IX_UQ_CO_Tag_Name_TagTypeId_Id;
 
-CREATE UNIQUE INDEX IX_UQ_CO_TagGroups_Name_Id ON TagGroups (
+CREATE UNIQUE INDEX IX_UQ_CO_Tag_Name_TagTypeId_Id ON Tag (
     Name,
-    Id
-);
-
-
--- Index: IX_UQ_CO_TagGroups_TagTypeId_Id
-DROP INDEX IF EXISTS IX_UQ_CO_TagGroups_TagTypeId_Id;
-
-CREATE UNIQUE INDEX IX_UQ_CO_TagGroups_TagTypeId_Id ON TagGroups (
     TagTypeId,
     Id
 );
 
 
--- Index: IX_UQ_CO_TagRelations_FromTagId_ToTagId
-DROP INDEX IF EXISTS IX_UQ_CO_TagRelations_FromTagId_ToTagId;
+-- Index: IX_UQ_CO_TagGroup_Name_Id
+DROP INDEX IF EXISTS IX_UQ_CO_TagGroup_Name_Id;
 
-CREATE UNIQUE INDEX IX_UQ_CO_TagRelations_FromTagId_ToTagId ON TagRelations (
+CREATE UNIQUE INDEX IX_UQ_CO_TagGroup_Name_Id ON TagGroup (
+    Name,
+    Id
+);
+
+
+-- Index: IX_UQ_CO_TagGroup_TagTypeId_Id
+DROP INDEX IF EXISTS IX_UQ_CO_TagGroup_TagTypeId_Id;
+
+CREATE UNIQUE INDEX IX_UQ_CO_TagGroup_TagTypeId_Id ON TagGroup (
+    TagTypeId,
+    Id
+);
+
+
+-- Index: IX_UQ_CO_TagRelation_FromTagId_ToTagId
+DROP INDEX IF EXISTS IX_UQ_CO_TagRelation_FromTagId_ToTagId;
+
+CREATE UNIQUE INDEX IX_UQ_CO_TagRelation_FromTagId_ToTagId ON TagRelation (
     FromTagId,
     ToTagId
 );
 
 
--- Index: IX_UQ_CO_TagRelations_ToTagId_FromTagId
-DROP INDEX IF EXISTS IX_UQ_CO_TagRelations_ToTagId_FromTagId;
+-- Index: IX_UQ_CO_TagRelation_ToTagId_FromTagId
+DROP INDEX IF EXISTS IX_UQ_CO_TagRelation_ToTagId_FromTagId;
 
-CREATE UNIQUE INDEX IX_UQ_CO_TagRelations_ToTagId_FromTagId ON TagRelations (
+CREATE UNIQUE INDEX IX_UQ_CO_TagRelation_ToTagId_FromTagId ON TagRelation (
     ToTagId,
     FromTagId
 );
 
 
--- Index: IX_UQ_CO_Tags_Name_TagTypeId_Id
-DROP INDEX IF EXISTS IX_UQ_CO_Tags_Name_TagTypeId_Id;
+-- Index: IX_UQ_CO_TagType_Id_Name
+DROP INDEX IF EXISTS IX_UQ_CO_TagType_Id_Name;
 
-CREATE UNIQUE INDEX IX_UQ_CO_Tags_Name_TagTypeId_Id ON Tags (
-    Name,
-    TagTypeId,
-    Id
-);
-
-
--- Index: IX_UQ_CO_TagTypes_Id_Name
-DROP INDEX IF EXISTS IX_UQ_CO_TagTypes_Id_Name;
-
-CREATE UNIQUE INDEX IX_UQ_CO_TagTypes_Id_Name ON TagTypes (
+CREATE UNIQUE INDEX IX_UQ_CO_TagType_Id_Name ON TagType (
     Id,
     Name
 );
 
 
--- Index: IX_UQ_CO_TagTypes_Name_Id
-DROP INDEX IF EXISTS IX_UQ_CO_TagTypes_Name_Id;
+-- Index: IX_UQ_CO_TagType_Name_Id
+DROP INDEX IF EXISTS IX_UQ_CO_TagType_Name_Id;
 
-CREATE UNIQUE INDEX IX_UQ_CO_TagTypes_Name_Id ON TagTypes (
+CREATE UNIQUE INDEX IX_UQ_CO_TagType_Name_Id ON TagType (
     Name,
     Id
 );
 
 
--- Index: IX_UQ_Collections_CollectionTagId_GalleryId
-DROP INDEX IF EXISTS IX_UQ_Collections_CollectionTagId_GalleryId;
+-- Index: IX_UQ_Collection_CollectionTagId_GalleryId
+DROP INDEX IF EXISTS IX_UQ_Collection_CollectionTagId_GalleryId;
 
-CREATE UNIQUE INDEX IX_UQ_Collections_CollectionTagId_GalleryId ON Collections (
+CREATE UNIQUE INDEX IX_UQ_Collection_CollectionTagId_GalleryId ON Collection (
     CollectionTagId,
     GalleryId
 );
 
 
--- Index: IX_UQ_FavoriteGalleries_GalleryId
-DROP INDEX IF EXISTS IX_UQ_FavoriteGalleries_GalleryId;
+-- Index: IX_UQ_FavoriteGallery_GalleryId
+DROP INDEX IF EXISTS IX_UQ_FavoriteGallery_GalleryId;
 
-CREATE UNIQUE INDEX IX_UQ_FavoriteGalleries_GalleryId ON FavoriteGalleries (
+CREATE UNIQUE INDEX IX_UQ_FavoriteGallery_GalleryId ON FavoriteGallery (
     GalleryId
 );
 
 
--- Index: IX_UQ_FavoriteGalleries_Id
-DROP INDEX IF EXISTS IX_UQ_FavoriteGalleries_Id;
+-- Index: IX_UQ_FavoriteGallery_Id
+DROP INDEX IF EXISTS IX_UQ_FavoriteGallery_Id;
 
-CREATE UNIQUE INDEX IX_UQ_FavoriteGalleries_Id ON FavoriteGalleries (
+CREATE UNIQUE INDEX IX_UQ_FavoriteGallery_Id ON FavoriteGallery (
     Id
 );
 
 
--- Index: IX_UQ_FavoriteTags_Id
-DROP INDEX IF EXISTS IX_UQ_FavoriteTags_Id;
+-- Index: IX_UQ_FavoriteTag_Id
+DROP INDEX IF EXISTS IX_UQ_FavoriteTag_Id;
 
-CREATE UNIQUE INDEX IX_UQ_FavoriteTags_Id ON FavoriteTags (
+CREATE UNIQUE INDEX IX_UQ_FavoriteTag_Id ON FavoriteTag (
     Id
 );
 
 
--- Index: IX_UQ_FavoriteTags_TagId
-DROP INDEX IF EXISTS IX_UQ_FavoriteTags_TagId;
+-- Index: IX_UQ_FavoriteTag_TagId
+DROP INDEX IF EXISTS IX_UQ_FavoriteTag_TagId;
 
-CREATE UNIQUE INDEX IX_UQ_FavoriteTags_TagId ON FavoriteTags (
+CREATE UNIQUE INDEX IX_UQ_FavoriteTag_TagId ON FavoriteTag (
     TagId
 );
 
 
--- Index: IX_UQ_Galleries_GalleryTypeId_Id
-DROP INDEX IF EXISTS IX_UQ_Galleries_GalleryTypeId_Id;
+-- Index: IX_UQ_Gallery_GalleryTypeId_Id
+DROP INDEX IF EXISTS IX_UQ_Gallery_GalleryTypeId_Id;
 
-CREATE UNIQUE INDEX IX_UQ_Galleries_GalleryTypeId_Id ON Galleries (
+CREATE UNIQUE INDEX IX_UQ_Gallery_GalleryTypeId_Id ON Gallery (
     GalleryTypeId,
     Id
 );
 
 
--- Index: IX_UQ_Galleries_Id
-DROP INDEX IF EXISTS IX_UQ_Galleries_Id;
+-- Index: IX_UQ_Gallery_Id
+DROP INDEX IF EXISTS IX_UQ_Gallery_Id;
 
-CREATE UNIQUE INDEX IX_UQ_Galleries_Id ON Galleries (
+CREATE UNIQUE INDEX IX_UQ_Gallery_Id ON Gallery (
     Id
 );
 
 
--- Index: IX_UQ_Galleries_Rating_Id
-DROP INDEX IF EXISTS IX_UQ_Galleries_Rating_Id;
+-- Index: IX_UQ_Gallery_Rating_Id
+DROP INDEX IF EXISTS IX_UQ_Gallery_Rating_Id;
 
-CREATE UNIQUE INDEX IX_UQ_Galleries_Rating_Id ON Galleries (
+CREATE UNIQUE INDEX IX_UQ_Gallery_Rating_Id ON Gallery (
     Rating,
     Id
 );
 
 
--- Index: IX_UQ_GalleryAliases_GalleryId_Id
-DROP INDEX IF EXISTS IX_UQ_GalleryAliases_GalleryId_Id;
+-- Index: IX_UQ_GalleryAlias_GalleryId_Id
+DROP INDEX IF EXISTS IX_UQ_GalleryAlias_GalleryId_Id;
 
-CREATE UNIQUE INDEX IX_UQ_GalleryAliases_GalleryId_Id ON GalleryAliases (
+CREATE UNIQUE INDEX IX_UQ_GalleryAlias_GalleryId_Id ON GalleryAlias (
     GalleryId,
     Id
 );
 
 
--- Index: IX_UQ_GalleryAliases_Id
-DROP INDEX IF EXISTS IX_UQ_GalleryAliases_Id;
+-- Index: IX_UQ_GalleryAlias_Id
+DROP INDEX IF EXISTS IX_UQ_GalleryAlias_Id;
 
-CREATE UNIQUE INDEX IX_UQ_GalleryAliases_Id ON GalleryAliases (
+CREATE UNIQUE INDEX IX_UQ_GalleryAlias_Id ON GalleryAlias (
     Id
 );
 
 
--- Index: IX_UQ_GalleryRelations_Id
-DROP INDEX IF EXISTS IX_UQ_GalleryRelations_Id;
+-- Index: IX_UQ_GalleryRelation_Id
+DROP INDEX IF EXISTS IX_UQ_GalleryRelation_Id;
 
-CREATE UNIQUE INDEX IX_UQ_GalleryRelations_Id ON GalleryRelations (
+CREATE UNIQUE INDEX IX_UQ_GalleryRelation_Id ON GalleryRelation (
     Id
 );
 
 
--- Index: IX_UQ_ResourceFiles_Id
-DROP INDEX IF EXISTS IX_UQ_ResourceFiles_Id;
+-- Index: IX_UQ_ResourceFile_Id
+DROP INDEX IF EXISTS IX_UQ_ResourceFile_Id;
 
-CREATE UNIQUE INDEX IX_UQ_ResourceFiles_Id ON ResourceFiles (
+CREATE UNIQUE INDEX IX_UQ_ResourceFile_Id ON ResourceFile (
     Id
 );
 
 
--- Index: IX_UQ_ResourceFiles_SourceInfoId
-DROP INDEX IF EXISTS IX_UQ_ResourceFiles_SourceInfoId;
+-- Index: IX_UQ_ResourceFile_SourceInfoId
+DROP INDEX IF EXISTS IX_UQ_ResourceFile_SourceInfoId;
 
-CREATE UNIQUE INDEX IX_UQ_ResourceFiles_SourceInfoId ON ResourceFiles (
+CREATE UNIQUE INDEX IX_UQ_ResourceFile_SourceInfoId ON ResourceFile (
     SourceInfoId
 );
 
 
--- Index: IX_UQ_SourceGroups_Id
-DROP INDEX IF EXISTS IX_UQ_SourceGroups_Id;
+-- Index: IX_UQ_SourceGroup_Id
+DROP INDEX IF EXISTS IX_UQ_SourceGroup_Id;
 
-CREATE UNIQUE INDEX IX_UQ_SourceGroups_Id ON SourceGroups (
+CREATE UNIQUE INDEX IX_UQ_SourceGroup_Id ON SourceGroup (
     Id
 );
 
@@ -565,27 +565,44 @@ CREATE UNIQUE INDEX IX_UQ_SourceInfo_Id ON SourceInfo (
 );
 
 
--- Index: IX_UQ_TagAliases_Id
-DROP INDEX IF EXISTS IX_UQ_TagAliases_Id;
+-- Index: IX_UQ_Tag_Id
+DROP INDEX IF EXISTS IX_UQ_Tag_Id;
 
-CREATE UNIQUE INDEX IX_UQ_TagAliases_Id ON TagAliases (
+CREATE UNIQUE INDEX IX_UQ_Tag_Id ON Tag (
     Id
 );
 
 
--- Index: IX_UQ_TagAliases_TagId_Id
-DROP INDEX IF EXISTS IX_UQ_TagAliases_TagId_Id;
+-- Index: IX_UQ_Tag_TagTypeId_Id
+DROP INDEX IF EXISTS IX_UQ_Tag_TagTypeId_Id;
 
-CREATE UNIQUE INDEX IX_UQ_TagAliases_TagId_Id ON TagAliases (
+CREATE UNIQUE INDEX IX_UQ_Tag_TagTypeId_Id ON Tag (
+    TagTypeId,
+    Id
+);
+
+
+-- Index: IX_UQ_TagAlias_Id
+DROP INDEX IF EXISTS IX_UQ_TagAlias_Id;
+
+CREATE UNIQUE INDEX IX_UQ_TagAlias_Id ON TagAlias (
+    Id
+);
+
+
+-- Index: IX_UQ_TagAlias_TagId_Id
+DROP INDEX IF EXISTS IX_UQ_TagAlias_TagId_Id;
+
+CREATE UNIQUE INDEX IX_UQ_TagAlias_TagId_Id ON TagAlias (
     TagId,
     Id
 );
 
 
--- Index: IX_UQ_TagGroups_Id
-DROP INDEX IF EXISTS IX_UQ_TagGroups_Id;
+-- Index: IX_UQ_TagGroup_Id
+DROP INDEX IF EXISTS IX_UQ_TagGroup_Id;
 
-CREATE UNIQUE INDEX IX_UQ_TagGroups_Id ON TagGroups (
+CREATE UNIQUE INDEX IX_UQ_TagGroup_Id ON TagGroup (
     Id
 );
 
@@ -593,62 +610,45 @@ CREATE UNIQUE INDEX IX_UQ_TagGroups_Id ON TagGroups (
 -- Index: IX_UQ_TagRelaitions_Id
 DROP INDEX IF EXISTS IX_UQ_TagRelaitions_Id;
 
-CREATE UNIQUE INDEX IX_UQ_TagRelaitions_Id ON TagRelations (
+CREATE UNIQUE INDEX IX_UQ_TagRelaitions_Id ON TagRelation (
     Id
 );
 
 
--- Index: IX_UQ_Tags_Id
-DROP INDEX IF EXISTS IX_UQ_Tags_Id;
-
-CREATE UNIQUE INDEX IX_UQ_Tags_Id ON Tags (
-    Id
-);
-
-
--- Index: IX_UQ_Tags_TagTypeId_Id
-DROP INDEX IF EXISTS IX_UQ_Tags_TagTypeId_Id;
-
-CREATE UNIQUE INDEX IX_UQ_Tags_TagTypeId_Id ON Tags (
-    TagTypeId,
-    Id
-);
-
-
--- Trigger: TR_Galleries_AI_Log_DateTimeRated
-DROP TRIGGER IF EXISTS TR_Galleries_AI_Log_DateTimeRated;
-CREATE TRIGGER TR_Galleries_AI_Log_DateTimeRated
+-- Trigger: TR_Gallery_AI_Log_DateTimeRated
+DROP TRIGGER IF EXISTS TR_Gallery_AI_Log_DateTimeRated;
+CREATE TRIGGER TR_Gallery_AI_Log_DateTimeRated
          AFTER INSERT
-            ON Galleries
+            ON Gallery
       FOR EACH ROW
           WHEN NEW.Rating IS NOT NULL
 BEGIN
-    UPDATE Galleries
+    UPDATE Gallery
        SET DateTimeRated = strftime('%s', 'now') 
      WHERE _rowid_ = NEW._rowid_;
 END;
 
 
--- Trigger: TR_Galleries_AU_ClearLog_DateTimeRatedOnNullRating
-DROP TRIGGER IF EXISTS TR_Galleries_AU_ClearLog_DateTimeRatedOnNullRating;
-CREATE TRIGGER TR_Galleries_AU_ClearLog_DateTimeRatedOnNullRating
+-- Trigger: TR_Gallery_AU_ClearLog_DateTimeRatedOnNullRating
+DROP TRIGGER IF EXISTS TR_Gallery_AU_ClearLog_DateTimeRatedOnNullRating;
+CREATE TRIGGER TR_Gallery_AU_ClearLog_DateTimeRatedOnNullRating
          AFTER UPDATE
-            ON Galleries
+            ON Gallery
       FOR EACH ROW
           WHEN (NEW.Rating IS NULL) AND 
                (NEW.Rating IS NOT OLD.Rating) 
 BEGIN
-    UPDATE Galleries
+    UPDATE Gallery
        SET DateTimeRated = NULL
      WHERE _rowid_ = NEW._rowid_;
 END;
 
 
--- Trigger: TR_Galleries_AU_Log_DateTimeLastEdited
-DROP TRIGGER IF EXISTS TR_Galleries_AU_Log_DateTimeLastEdited;
-CREATE TRIGGER TR_Galleries_AU_Log_DateTimeLastEdited
+-- Trigger: TR_Gallery_AU_Log_DateTimeLastEdited
+DROP TRIGGER IF EXISTS TR_Gallery_AU_Log_DateTimeLastEdited;
+CREATE TRIGGER TR_Gallery_AU_Log_DateTimeLastEdited
          AFTER UPDATE
-            ON Galleries
+            ON Gallery
       FOR EACH ROW
           WHEN (OLD.Name IS NOT NEW.Name) OR 
                (OLD.NameCultureInfo IS NOT NEW.NameCultureInfo) OR 
@@ -657,91 +657,91 @@ CREATE TRIGGER TR_Galleries_AU_Log_DateTimeLastEdited
                (OLD.ResourceFileId IS NOT NEW.ResourceFileId) OR 
                (OLD.Length IS NOT NEW.Length) 
 BEGIN
-    UPDATE Galleries
+    UPDATE Gallery
        SET DateTimeLastEdited = strftime('%s', 'now') 
      WHERE _rowid_ = NEW._rowid_;
 END;
 
 
--- Trigger: TR_Galleries_AU_Log_DateTimeRated
-DROP TRIGGER IF EXISTS TR_Galleries_AU_Log_DateTimeRated;
-CREATE TRIGGER TR_Galleries_AU_Log_DateTimeRated
+-- Trigger: TR_Gallery_AU_Log_DateTimeRated
+DROP TRIGGER IF EXISTS TR_Gallery_AU_Log_DateTimeRated;
+CREATE TRIGGER TR_Gallery_AU_Log_DateTimeRated
          AFTER UPDATE
-            ON Galleries
+            ON Gallery
       FOR EACH ROW
           WHEN (NEW.Rating IS NOT NULL) AND 
                (NEW.Rating IS NOT OLD.Rating) 
 BEGIN
-    UPDATE Galleries
+    UPDATE Gallery
        SET DateTimeRated = strftime('%s', 'now') 
      WHERE _rowid_ = NEW._rowid_;
 END;
 
 
--- Trigger: TR_GalleryTags_AI_Abort_TagTypeGroupTypeNotMatch
-DROP TRIGGER IF EXISTS TR_GalleryTags_AI_Abort_TagTypeGroupTypeNotMatch;
-CREATE TRIGGER TR_GalleryTags_AI_Abort_TagTypeGroupTypeNotMatch
+-- Trigger: TR_GalleryTag_AI_Abort_TagTypeGroupTypeNotMatch
+DROP TRIGGER IF EXISTS TR_GalleryTag_AI_Abort_TagTypeGroupTypeNotMatch;
+CREATE TRIGGER TR_GalleryTag_AI_Abort_TagTypeGroupTypeNotMatch
          AFTER INSERT
-            ON GalleryTags
+            ON GalleryTag
       FOR EACH ROW
           WHEN NEW.TagGroupId IS NOT NULL
 BEGIN
     SELECT CASE WHEN ( (
-                   SELECT Tags.TagTypeId
-                     FROM Tags
-                    WHERE Tags.Id = NEW.TagId
+                   SELECT Tag.TagTypeId
+                     FROM Tag
+                    WHERE Tag.Id = NEW.TagId
                )
                IS NOT (
-                          SELECT TagGroups.TagTypeId
-                            FROM TagGroups
-                           WHERE TagGroups.Id = NEW.TagGroupId
+                          SELECT TagGroup.TagTypeId
+                            FROM TagGroup
+                           WHERE TagGroup.Id = NEW.TagGroupId
                       )
                ) THEN RAISE(ABORT, "TagType of Tag does not match the TagType of TagGroup.") END;
 END;
 
 
--- Trigger: TR_GalleryTags_AI_Log_OnTagAdded_DateTimeLastTagged
-DROP TRIGGER IF EXISTS TR_GalleryTags_AI_Log_OnTagAdded_DateTimeLastTagged;
-CREATE TRIGGER TR_GalleryTags_AI_Log_OnTagAdded_DateTimeLastTagged
+-- Trigger: TR_GalleryTag_AI_Log_OnTagAdded_DateTimeLastTagged
+DROP TRIGGER IF EXISTS TR_GalleryTag_AI_Log_OnTagAdded_DateTimeLastTagged;
+CREATE TRIGGER TR_GalleryTag_AI_Log_OnTagAdded_DateTimeLastTagged
          AFTER INSERT
-            ON GalleryTags
+            ON GalleryTag
 BEGIN
-    UPDATE Galleries
+    UPDATE Gallery
        SET DateTimeLastTagged = strftime('%s', 'now') 
      WHERE Id = NEW.GalleryId;
 END;
 
 
--- Trigger: TR_GalleryTags_AU_Abort_TagTypeGroupTypeNotMatch
-DROP TRIGGER IF EXISTS TR_GalleryTags_AU_Abort_TagTypeGroupTypeNotMatch;
-CREATE TRIGGER TR_GalleryTags_AU_Abort_TagTypeGroupTypeNotMatch
+-- Trigger: TR_GalleryTag_AU_Abort_TagTypeGroupTypeNotMatch
+DROP TRIGGER IF EXISTS TR_GalleryTag_AU_Abort_TagTypeGroupTypeNotMatch;
+CREATE TRIGGER TR_GalleryTag_AU_Abort_TagTypeGroupTypeNotMatch
          AFTER UPDATE
-            ON GalleryTags
+            ON GalleryTag
       FOR EACH ROW
           WHEN NEW.TagGroupId IS NOT NULL
 BEGIN
     SELECT CASE WHEN ( (
-                   SELECT Tags.TagTypeId
-                     FROM Tags
-                    WHERE Tags.Id = NEW.TagId
+                   SELECT Tag.TagTypeId
+                     FROM Tag
+                    WHERE Tag.Id = NEW.TagId
                )
                IS NOT (
-                          SELECT TagGroups.TagTypeId
-                            FROM TagGroups
-                           WHERE TagGroups.Id = NEW.TagGroupId
+                          SELECT TagGroup.TagTypeId
+                            FROM TagGroup
+                           WHERE TagGroup.Id = NEW.TagGroupId
                       )
                ) THEN RAISE(ABORT, "TagType of Tag does not match the TagType of TagGroup.") END;
 END;
 
 
--- Trigger: TR_GalleryTags_AU_Log_OnTagUpdated_Galleries_DateTimeLastTagged
-DROP TRIGGER IF EXISTS TR_GalleryTags_AU_Log_OnTagUpdated_Galleries_DateTimeLastTagged;
-CREATE TRIGGER TR_GalleryTags_AU_Log_OnTagUpdated_Galleries_DateTimeLastTagged
+-- Trigger: TR_GalleryTag_AU_Log_OnTagUpdated_Gallery_DateTimeLastTagged
+DROP TRIGGER IF EXISTS TR_GalleryTag_AU_Log_OnTagUpdated_Gallery_DateTimeLastTagged;
+CREATE TRIGGER TR_GalleryTag_AU_Log_OnTagUpdated_Gallery_DateTimeLastTagged
          AFTER UPDATE
-            ON GalleryTags
+            ON GalleryTag
       FOR EACH ROW
 BEGIN
-    UPDATE Galleries
+    UPDATE Gallery
        SET DateTimeLastTagged = strftime('%s', 'now') 
      WHERE Id = NEW.GalleryId OR 
            Id = OLD.GalleryId;

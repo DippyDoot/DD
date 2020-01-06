@@ -22,44 +22,44 @@ This does not include indexes that contain irrelavant columns (columns that are 
 
 Each index follows the naming scheme: IX_{Unique}_{Covered}_{Table}_{Columns}
 
-Collections
-	IX_UQ_Collections_CollectionTagId_GalleryId
+Collection
+	IX_UQ_Collection_CollectionTagId_GalleryId
 
-FavoriteGalleries
-	IX_UQ_FavoriteGalleries_GalleryId
-	IX_UQ_FavoriteGalleries_Id
+FavoriteGallery
+	IX_UQ_FavoriteGallery_GalleryId
+	IX_UQ_FavoriteGallery_Id
 
-FavoriteTags
-	IX_UQ_FavoriteTags_Id
-	IX_UQ_FavoriteTags_TagId
+FavoriteTag
+	IX_UQ_FavoriteTag_Id
+	IX_UQ_FavoriteTag_TagId
 
-Galleries
-	IX_UQ_Galleries_Id
-	IX_UQ_Galleries_Rating_Id
-	IX_UQ_Galleries_GalleryTypeId_Id
+Gallery
+	IX_UQ_Gallery_Id
+	IX_UQ_Gallery_Rating_Id
+	IX_UQ_Gallery_GalleryTypeId_Id
 
-GalleryAliases
-	IX_UQ_GalleryAliases_Id
-	IX_UQ_GalleryAliases_GalleryId_Id
+GalleryAlias
+	IX_UQ_GalleryAlias_Id
+	IX_UQ_GalleryAlias_GalleryId_Id
 
-GalleryRelations
-	IX_UQ_GalleryRelations_Id
-	IX_UQ_CO_GalleryRelations_FromGalleryId_ToGalleryId
-	IX_UQ_CO_GalleryRelations_ToGalleryId_FromGalleryId
+GalleryRelation
+	IX_UQ_GalleryRelation_Id
+	IX_UQ_CO_GalleryRelation_FromGalleryId_ToGalleryId
+	IX_UQ_CO_GalleryRelation_ToGalleryId_FromGalleryId
 
-GalleryTags
-	IX_UQ_CO_GalleryTags_TagId_GalleryId
-	IX_UQ_CO_GalleryTags_GalleryId_TagGroupId_TagId
+GalleryTag
+	IX_UQ_CO_GalleryTag_TagId_GalleryId
+	IX_UQ_CO_GalleryTag_GalleryId_TagGroupId_TagId
 
-GalleryTypes
-	IX_UQ_CO_GalleryTypes_Id_Name
+GalleryType
+	IX_UQ_CO_GalleryType_Id_Name
 
-ResourceFiles
-	IX_UQ_ResourceFiles_Id
-	IX_UQ_ResourceFiles_SourceInfoId
+ResourceFile
+	IX_UQ_ResourceFile_Id
+	IX_UQ_ResourceFile_SourceInfoId
 
-SourceGroups
-	IX_UQ_SourceGroups_Id
+SourceGroup
+	IX_UQ_SourceGroup_Id
 
 SourceInfo
 	IX_UQ_SourceInfo_Id
@@ -68,25 +68,25 @@ SourceInfo
 	IX_UQ_CO_SourceInfo_DateTImeConverted_Id
 	IX_UQ_CO_SourceInfo_DateTimeAdded_Id
 
-TagAliases
-	IX_UQ_TagAliases_Id
-	IX_UQ_TagAliases_TagId_Id
+TagAlias
+	IX_UQ_TagAlias_Id
+	IX_UQ_TagAlias_TagId_Id
 
-TagGroups
-	IX_UQ_TagGroups_Id
-	IX_UQ_CO_TagGroups_Name_Id
-	IX_UQ_CO_TagGroups_TagTypeId_Id
+TagGroup
+	IX_UQ_TagGroup_Id
+	IX_UQ_CO_TagGroup_Name_Id
+	IX_UQ_CO_TagGroup_TagTypeId_Id
 
-TagRelations
+TagRelation
 	IX_UQ_TagRelaitions_Id
-	IX_UQ_CO_TagRelations_FromTagId_ToTagId
-	IX_UQ_CO_TagRelations_ToTagId_FromTagId
+	IX_UQ_CO_TagRelation_FromTagId_ToTagId
+	IX_UQ_CO_TagRelation_ToTagId_FromTagId
 
-Tags
-	IX_UQ_Tags_Id
-	IX_UQ_CO_Tags_Name_TagTypeId_Id
-	IX_UQ_Tags_TagTypeId_Id
+Tag
+	IX_UQ_Tag_Id
+	IX_UQ_CO_Tag_Name_TagTypeId_Id
+	IX_UQ_Tag_TagTypeId_Id
 
-TagTypes
-	IX_UQ_CO_TagTypes_Id_Name
-	IX_UQ_CO_TagTypes_Name_Id
+TagType
+	IX_UQ_CO_TagType_Id_Name
+	IX_UQ_CO_TagType_Name_Id
