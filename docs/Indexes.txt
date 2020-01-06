@@ -43,7 +43,6 @@ GalleryAlias
 	IX_UQ_GalleryAlias_GalleryId_Id
 
 GalleryRelation
-	IX_UQ_GalleryRelation_Id
 	IX_UQ_CO_GalleryRelation_FromGalleryId_ToGalleryId
 	IX_UQ_CO_GalleryRelation_ToGalleryId_FromGalleryId
 
@@ -78,7 +77,6 @@ TagGroup
 	IX_UQ_CO_TagGroup_TagTypeId_Id
 
 TagRelation
-	IX_UQ_TagRelaitions_Id
 	IX_UQ_CO_TagRelation_FromTagId_ToTagId
 	IX_UQ_CO_TagRelation_ToTagId_FromTagId
 

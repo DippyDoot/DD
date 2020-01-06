@@ -1,5 +1,5 @@
 --
--- File generated with SQLiteStudio v3.2.1 on Mon Jan 6 03:02:23 2020
+-- File generated with SQLiteStudio v3.2.1 on Mon Jan 6 03:47:49 2020
 --
 -- Text encoding used: UTF-8
 --
@@ -99,15 +99,16 @@ CREATE TABLE GalleryAlias (
 DROP TABLE IF EXISTS GalleryRelation;
 
 CREATE TABLE GalleryRelation (
-    Id            INTEGER CONSTRAINT FK_GalleryRelation_Id PRIMARY KEY AUTOINCREMENT
-                          CONSTRAINT UQ_GalleryRelation_Id UNIQUE
-                          CONSTRAINT NN_GalleryRelation_Id NOT NULL,
     FromGalleryId INTEGER CONSTRAINT NN_GalleryRelation_FromTagId NOT NULL
                           CONSTRAINT FK_GalleryRelation_FromTagId_Gallery_Id REFERENCES Gallery (Id) ON DELETE CASCADE
                                                                                                      ON UPDATE CASCADE,
     ToGalleryId   INTEGER CONSTRAINT NN_GalleryRelation_ToTagId NOT NULL
                           CONSTRAINT FK_GalleryRelation_ToTagId REFERENCES Gallery (Id),
-    CONSTRAINT UQ_GalleryRelation_FromTagId_ToTagId UNIQUE (
+    CONSTRAINT UQ_GalleryRelation_FromTagGalleryId_ToGalleryId UNIQUE (
+        FromGalleryId,
+        ToGalleryId
+    ),
+    CONSTRAINT FK_GalleryRelation_FromGalleryId_ToGalleryId PRIMARY KEY (
         FromGalleryId,
         ToGalleryId
     )
@@ -264,9 +265,6 @@ CREATE TABLE TagGroup (
 DROP TABLE IF EXISTS TagRelation;
 
 CREATE TABLE TagRelation (
-    Id        INTEGER CONSTRAINT PK_TagRelation_Id PRIMARY KEY AUTOINCREMENT
-                      CONSTRAINT UQ_TagRelation_Id UNIQUE
-                      CONSTRAINT NN_TagRelation_Id NOT NULL,
     FromTagId INTEGER CONSTRAINT NN_TagRelation_FromTagId NOT NULL
                       CONSTRAINT FK_TagRelation_FromTagId_Tag_Id REFERENCES Tag (Id) ON DELETE CASCADE
                                                                                      ON UPDATE CASCADE,
@@ -274,6 +272,10 @@ CREATE TABLE TagRelation (
                                                                                    ON UPDATE CASCADE
                       CONSTRAINT NN_TagRelation_ToTagId NOT NULL,
     CONSTRAINT UQ_TagRelation_FromTagId_ToTagId UNIQUE (
+        FromTagId,
+        ToTagId
+    ),
+    CONSTRAINT FK_TagRelation_FromTagId_ToTagId PRIMARY KEY (
         FromTagId,
         ToTagId
     )
@@ -525,14 +527,6 @@ CREATE UNIQUE INDEX IX_UQ_GalleryAlias_Id ON GalleryAlias (
 );
 
 
--- Index: IX_UQ_GalleryRelation_Id
-DROP INDEX IF EXISTS IX_UQ_GalleryRelation_Id;
-
-CREATE UNIQUE INDEX IX_UQ_GalleryRelation_Id ON GalleryRelation (
-    Id
-);
-
-
 -- Index: IX_UQ_ResourceFile_Id
 DROP INDEX IF EXISTS IX_UQ_ResourceFile_Id;
 
@@ -603,14 +597,6 @@ CREATE UNIQUE INDEX IX_UQ_TagAlias_TagId_Id ON TagAlias (
 DROP INDEX IF EXISTS IX_UQ_TagGroup_Id;
 
 CREATE UNIQUE INDEX IX_UQ_TagGroup_Id ON TagGroup (
-    Id
-);
-
-
--- Index: IX_UQ_TagRelaitions_Id
-DROP INDEX IF EXISTS IX_UQ_TagRelaitions_Id;
-
-CREATE UNIQUE INDEX IX_UQ_TagRelaitions_Id ON TagRelation (
     Id
 );
 
