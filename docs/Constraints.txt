@@ -16,3 +16,4 @@ There are also some oddities that SQLite has that are worth explicitly explainin
 05. SQLite only has partial support for collation. (only has ASCII built in) It does support it, but collation libraries must be provided.
 06. SQLite only has 5 types: Text, Integer, Real, Numeric, and Blob.
 07. Null values are considered unique and can be used in unique indexes.
+08. SQLite only natively supports UTF-8.
